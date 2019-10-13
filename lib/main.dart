@@ -4,6 +4,8 @@ import 'package:project/pages/add_event_page.dart';
 import 'package:project/pages/add_task_page.dart';
 import 'package:project/pages/event_page.dart';
 import 'package:project/pages/task_page.dart';
+import 'package:project/widgets/custom_button.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -11,12 +13,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'RemindMe',
       theme: ThemeData(
       
         primarySwatch: Colors.deepPurple
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'RemindMe'),
+      routes: <String,WidgetBuilder>{
+        "/taskPage":(BuildContext context)=>TaskPage(),
+        "/eventPage":(BuildContext context)=>EventPage()
+      }
     );
   }
 }
@@ -89,90 +95,89 @@ class _MyHomePageState extends State<MyHomePage> {
         }
 
   Widget _mainContext(BuildContext context) {
+    var children2 = <Widget>[
+               SizedBox(height: 60),
+               Padding(
+                 padding:const EdgeInsets.all(24.0),
+                 
+                 
+               child:Text("Monday",
+                
+               style: TextStyle(fontSize: 35 ,
+               fontWeight: FontWeight.bold,
+               color: Colors.white,
+            )),
+               
+               ),
+  
+         
+            Row (
+                children: <Widget>[
+                Padding(padding: EdgeInsets.all(20.0),),
+                 Expanded(
 
+                       child: CustomButton(
+                          onPressed: (){
+                            Navigator.of(context).pushNamed("taskPage");
+                         _pageController.previousPage(
+                           duration:Duration(milliseconds: 500),
+                           curve:Curves.bounceInOut);
+                       },
+                      buttonText: "Task",
+                      
+                       color:
+                       currentPage < 0.5 ? Theme.of(context).accentColor:Colors.white,
+                       textColor:
+                        currentPage <0.5? Colors.black: Theme.of(context).accentColor,
+                      
+                   ),
+                     ),
+                 
+                 SizedBox(
+                   width: 32,
+                 ),
+
+                  Expanded(
+                     child: CustomButton(
+                         onPressed: (){
+                            Navigator.of(context).pushNamed("eventPage");
+                           _pageController.nextPage(
+                           duration:Duration(milliseconds: 500),
+                           curve:Curves.bounceInOut);
+                         },
+                     buttonText: "Events",
+
+                     color:
+                     currentPage > 0.5 ? Theme.of(context).accentColor:Colors.white,
+                     textColor:
+                        currentPage >0.5? Colors.black: Theme.of(context).accentColor,
+                     
+                   
+          
+                    ),
+                    ),
+                SizedBox(
+                    width:32 ,)
+               ],
+               ),
+               ];
     return Column(
         children: <Widget>[  
 
         ClipPath (
           clipper: Myclipper(),
            child: Container(
-             
              child: Column(
                crossAxisAlignment: CrossAxisAlignment.start,
-               children: <Widget>[
-               SizedBox(height: 60),
-               Padding(
-                 padding:const EdgeInsets.all(24.0),
-               child:Text("Monday",
+               children: children2,
+               ),
                 
-               style: TextStyle(fontSize: 35 ,
-               fontWeight: FontWeight.bold,
-               color: Colors.white,
-               ),
-               ),
-               ),
-             
-              Row (
-                 children: <Widget>[
-                Padding(padding: EdgeInsets.all(20.0),),
-                 Expanded(
-
-                  
-                       child: MaterialButton(
-                       shape: RoundedRectangleBorder(
-                       borderRadius: BorderRadius.circular(12.0)),
-                       color:
-                       currentPage < 0.5 ? Theme.of(context).accentColor:Colors.white,
-                       textColor:
-                        currentPage <0.5? Colors.black: Theme.of(context).accentColor,
-                
-                       padding: const EdgeInsets.all(14.0),
-                       child: Text("Task"),
-                       onPressed: (){
-                         _pageController.previousPage(
-                           duration:Duration(milliseconds: 500),
-                           curve:Curves.bounceInOut);
-                          
-                       },
-                   ),
-                     ),
-                 
-               
-                 SizedBox(
-                   width: 32,
-                 ),
-
-                  Expanded(
-                     child: MaterialButton(
-                     shape: RoundedRectangleBorder(
-                    side: BorderSide(),
-                     borderRadius: BorderRadius.circular(12.0)),
-                     color:
-                    currentPage > 0.5 ? Theme.of(context).accentColor:Colors.white,
-                       textColor:
-                        currentPage >0.5? Colors.black: Theme.of(context).accentColor,
-                     padding: const EdgeInsets.all(14.0),
-                     child: Text("Events",),
-                     onPressed: (){
-                      _pageController.nextPage(
-                           duration:Duration(milliseconds: 500),
-                           curve:Curves.bounceInOut);
-                     },
-                 ),
-                  ),
-                  SizedBox(
-                    width:32 ,)
-               ],
-               ),
-             ],
-             ),
-            
             height:300 ,
             decoration: BoxDecoration(
-              color:Colors.deepPurple[400] ),
+            color:Colors.deepPurple[400] ),
               ),
-        ),
-       
+                ),
+          
         Expanded(
         child: PageView(
           controller: _pageController,
@@ -180,8 +185,8 @@ class _MyHomePageState extends State<MyHomePage> {
           TaskPage(),EventPage()],
         )),
 
-       
-
+             
+             
       ],
      );
  
