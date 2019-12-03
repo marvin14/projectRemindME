@@ -1,12 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AddEventPage extends StatefulWidget{
 
   _AddEventPageState createState () => _AddEventPageState();
 }
 class _AddEventPageState extends State <AddEventPage>{
+
+   String id;
+   final db = Firestore.instance;
+
+  TextEditingController todo = TextEditingController();
+  TextEditingController description = TextEditingController();
+  TextEditingController time = TextEditingController();
   @override
+
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(24.0),
@@ -27,6 +36,8 @@ class _AddEventPageState extends State <AddEventPage>{
                 ),
                 labelText: 'Enter event name'
                 ),
+
+                controller: todo,
                ),
              TextField(
             decoration:InputDecoration(
@@ -35,6 +46,7 @@ class _AddEventPageState extends State <AddEventPage>{
                 ),
                 labelText: 'Enter description'
                 ),
+                controller: description,
                ),
                SizedBox(height: 12,),
                   FlatButton(
@@ -53,6 +65,8 @@ class _AddEventPageState extends State <AddEventPage>{
     );
     
       }
+    
+  
 
   Row _actionButton(BuildContext context) {
     return Row(
@@ -67,12 +81,24 @@ class _AddEventPageState extends State <AddEventPage>{
                 MaterialButton(
                    shape: RoundedRectangleBorder(
                    borderRadius: BorderRadius.circular(12.0)),
-                  onPressed:(){},
+                  onPressed:(){
+                    createData();
+                  },
                   child: Text("Save"),
                   textColor: Colors.white,
                   color: Theme.of(context).accentColor, ) 
              ],);
   }
+ void createData() async {
+    final task = todo.text;
+    final descrp = description.text;
+  
 
+    DocumentReference ref = await db.collection('todo').add({'Event': '$task', 'Description': '$descrp', });
+    setState(() => id = ref.documentID);
+    print(ref.documentID);
 
+  
+
+}
 }

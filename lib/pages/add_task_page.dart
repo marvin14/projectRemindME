@@ -1,11 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AddTaskPage extends StatefulWidget{
 
   _AddTaskPageState createState () => _AddTaskPageState();
 }
 class _AddTaskPageState extends State <AddTaskPage>{
+  String id;
+  final db = Firestore.instance;
+
+
+ 
   @override
   Widget build(BuildContext context) {
     return Padding(

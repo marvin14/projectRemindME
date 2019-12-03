@@ -1,4 +1,5 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:project/pages/add_event_page.dart';
@@ -7,23 +8,36 @@ import 'package:project/pages/calendar.dart';
 import 'package:project/pages/event_page.dart';
 import 'package:project/pages/task_page.dart';
 import 'package:project/widgets/custom_button.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:project/pages/auth.dart';
 
 
 class MyHomePage extends StatefulWidget {
  
-  const MyHomePage({Key key, this.user, this.title}) : super(key: key);
-  final FirebaseUser user;
-  final String title;
+   MyHomePage({Key key , this.auth, this.onSignedOut,}) : super(key: key);
+  final BaseAuth auth;
+  final VoidCallback onSignedOut;
+
+  void _signOut() async{
+    try{
+      await auth.signOut();
+      onSignedOut();
+    }catch(e){
+      print(e);
+    }
+  }
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
+ 
+
 
 class _MyHomePageState extends State<MyHomePage> {
   
   PageController _pageController = PageController();
   double currentPage = 0;
+
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
         
           ListTile(title: Text("Profile"),
-          trailing: Icon(Icons.arrow_forward),
-
-          
+          trailing: Icon(Icons.arrow_forward),          
           ),
           Divider(),
            ListTile
@@ -58,9 +70,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Divider(),        
            ListTile(title: Text("Settings"),
-          trailing: Icon(Icons.settings),
-          
-          ),
+          trailing: Icon(Icons.settings),  
+          ), 
+          Divider(),
+          FlatButton(onPressed:(){}, 
+          child: Text('Signout', style: TextStyle(fontSize: 17.0),) ,)
 
         ],),),
         body:Stack(
@@ -113,7 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
                  padding:const EdgeInsets.all(24.0),
                  
                  
-               child:Text("Monday",
+               child:Text("",
                 
                style: TextStyle(fontSize: 35 ,
                fontWeight: FontWeight.bold,
